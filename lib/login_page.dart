@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({Key? key, this.preferences}) : super(key: key);
+  final SharedPreferences? preferences;
 
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -34,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
                     height: 15,
                   ),
                   const Text(
-                    'Login in',
+                    'Login',
                     style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
@@ -78,6 +81,29 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             ),
                           ),
+                        ),const SizedBox(height: 200,),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              this.widget.preferences?.setBool("didOnboardingDone", false);
+                            });
+                          },
+                          child: Container(
+                            height: 50,
+                            width: 120,
+                            decoration: BoxDecoration(
+                              color: Colors.orange,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: const Center(
+                              child: Text(
+                                'reset onboarding',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -92,66 +118,67 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget buildPassword() => Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 16),
-    child: Form(
-      key: _passwordformKey,
-      child: TextFormField(
-        validator: (String? value) {
-          if (value!.length < 3) {
-            return 'Enter at least 3 character';
-          } else {
-            return null;
-          }
-        },
-        controller: _passwordController,
-        maxLength: 30,
-        obscureText: _secureText,
-        maxLines: 1,
-        decoration: InputDecoration(
-          errorText: _passwordError,
-          hintText: 'Password',
-          labelStyle: const TextStyle(fontSize: 15),
-          border: const OutlineInputBorder(),
-          counterText: '',
-          suffixIcon: IconButton(
-            icon: Icon(_secureText ? Icons.remove_red_eye : Icons.security),
-            onPressed: () {
-              setState(() {
-                _secureText = !_secureText;
-              });
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Form(
+          key: _passwordformKey,
+          child: TextFormField(
+            validator: (String? value) {
+              if (value!.length < 3) {
+                return 'Enter at least 3 character';
+              } else {
+                return null;
+              }
             },
+            controller: _passwordController,
+            maxLength: 30,
+            obscureText: _secureText,
+            maxLines: 1,
+            decoration: InputDecoration(
+              errorText: _passwordError,
+              hintText: 'Password',
+              labelStyle: const TextStyle(fontSize: 15),
+              border: const OutlineInputBorder(),
+              counterText: '',
+              suffixIcon: IconButton(
+                icon: Icon(_secureText ? Icons.remove_red_eye : Icons.security),
+                onPressed: () {
+                  setState(() {
+                    _secureText = !_secureText;
+                  });
+                },
+              ),
+            ),
           ),
         ),
-      ),
-    ),
-  );
-  Widget buildUsername() => Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 16),
-    child: Form(
-      key: _usernameformKey,
-      child: TextFormField(
-        validator: (String? value) {
-          if (value!.length < 3) {
-            return 'Enter at least 3 character';
-          } else {
-            return null;
-          }
-        },
-        controller: _usernameController,
-        maxLength: 30,
-        maxLines: 1,
-        decoration: InputDecoration(
-          errorText: _passwordError,
-          hintText: 'User Name',
-          labelStyle: const TextStyle(fontSize: 15),
-          border: OutlineInputBorder(),
-          counterText: '',
-        ),
-      ),
-    ),
-  );
+      );
 
-  void addItemToList (){
+  Widget buildUsername() => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Form(
+          key: _usernameformKey,
+          child: TextFormField(
+            validator: (String? value) {
+              if (value!.length < 3) {
+                return 'Enter at least 3 character';
+              } else {
+                return null;
+              }
+            },
+            controller: _usernameController,
+            maxLength: 30,
+            maxLines: 1,
+            decoration: InputDecoration(
+              errorText: _passwordError,
+              hintText: 'User Name',
+              labelStyle: const TextStyle(fontSize: 15),
+              border: OutlineInputBorder(),
+              counterText: '',
+            ),
+          ),
+        ),
+      );
+
+  void addItemToList() {
     setState(() {
       userInfo.insert(0, {
         "username": _usernameController.text,

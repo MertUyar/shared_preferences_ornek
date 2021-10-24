@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preference_ornek/pageview_content.dart';
 import 'package:shared_preference_ornek/pageview_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'login_page.dart';
 
 class OnboardingPage extends StatefulWidget {
-  const OnboardingPage({Key? key}) : super(key: key);
+  const OnboardingPage({Key? key, this.preferences}) : super(key: key);
+  final SharedPreferences? preferences;
 
   @override
   State<OnboardingPage> createState() => _OnboardingPageState();
@@ -98,6 +100,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
       visible: currentPage == pageviewItem.length - 1 ? true : false,
       child: GestureDetector(
         onTap: () {
+          setState(() {
+            this.widget.preferences?.setBool("didOnboardingDone", true);
+          });
           Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
         },
         child: Container(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preference_ornek/onboarding_page.dart';
+import 'package:shared_preference_ornek/splash.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const OnboardingPage(),
+      home: const Splash(),
     );
   }
 }
